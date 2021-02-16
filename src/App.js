@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from 'react';
+import { useReducer } from 'react';
 import './App.css';
 
 const globalState = {
@@ -6,54 +6,48 @@ const globalState = {
   body: 'O body do contexto',
   counter: 0,
 };
-const GlobalContext = createContext();
 
-// eslint-disable-next-line
-const Div = ({ children }) => {
-  return (
-    <>
-      <H1 />
-      <P />
-    </>
-  );
-};
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'muda': {
+      console.log('Chamou muda com', action.payload);
+      return { ...state, title: action.payload };
+    }
+    case 'inverter': {
+      console.log('Chamou inverter');
+      const { title } = state;
+      return { ...state, title: title.split('').reverse().join('') };
+    }
+  }
 
-// eslint-disable-next-line
-const H1 = () => {
-  const theContext = useContext(GlobalContext);
-  const {
-    contextState: { title, counter },
-  } = theContext;
-  return (
-    <h1>
-      {title} {counter}
-    </h1>
-  );
-};
-
-// eslint-disable-next-line
-const P = () => {
-  const theContext = useContext(GlobalContext);
-  const {
-    contextState: { body, counter },
-    setContextState,
-  } = theContext;
-  return (
-    <p
-      onClick={() => setContextState((s) => ({ ...s, counter: s.counter + 1 }))}
-    >
-      {body} {counter}
-    </p>
-  );
+  console.log('NENHUMA ACTION ENCONTRADA...');
+  return { ...state };
 };
 
 function App() {
-  const [contextState, setContextState] = useState(globalState);
+  const [state, dispatch] = useReducer(reducer, globalState);
+  const { counter, title, body } = state;
 
   return (
-    <GlobalContext.Provider value={{ contextState, setContextState }}>
-      <Div />
-    </GlobalContext.Provider>
+    <div>
+      <h1>
+        {title} {counter}
+      </h1>
+      <button
+        onClick={() =>
+          dispatch({
+            type: 'muda',
+            payload: new Date().toLocaleString('pt-BR'),
+          })
+        }
+      >
+        Click
+      </button>
+      <button onClick={() => dispatch({ type: 'inverter' })}>Invert</button>
+      <button onClick={() => dispatch({ type: 'QUALQUERCOiSA' })}>
+        SEM ACTION
+      </button>
+    </div>
   );
 }
 
