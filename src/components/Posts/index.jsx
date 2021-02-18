@@ -6,6 +6,7 @@ import {
 import { CounterContext } from '../../contexts/CounterProvider/context';
 import { loadPosts } from '../../contexts/PostsProvider/actions';
 import { PostsContext } from '../../contexts/PostsProvider/context';
+import { Menu } from '../Menu';
 
 export const Posts = () => {
   const isMounted = useRef(true);
