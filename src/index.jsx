@@ -11,7 +11,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Menu />
       <Switch>
-        <Route path="/abc" component={Abc} />
+        <Route path="/abc/:slug?/:id?" component={Abc} />
         <Route path="/" component={App} />
       </Switch>
     </BrowserRouter>
